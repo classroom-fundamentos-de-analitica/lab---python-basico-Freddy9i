@@ -14,8 +14,6 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 from csv import reader
 from collections import Counter
 from operator import itemgetter
-import re
-from turtle import clear
 datos = []
 
 with open('data.csv', 'r') as archivo:
