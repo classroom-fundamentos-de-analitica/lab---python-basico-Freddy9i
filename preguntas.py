@@ -11,6 +11,15 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+from csv import reader
+from collections import Counter
+from operator import itemgetter
+datos = []
+
+with open('data.csv', 'r') as archivo:
+    datosAux = reader(archivo, delimiter="\t")
+    for fila in datosAux:
+        datos.append(fila)
 
 
 def pregunta_01():
@@ -21,7 +30,8 @@ def pregunta_01():
     214
 
     """
-    return
+    aux = [int(i[1]) for i in datos]
+    return sum(aux)
 
 
 def pregunta_02():
@@ -39,7 +49,12 @@ def pregunta_02():
     ]
 
     """
-    return
+    aux = [i[0] for i in datos]
+    respuesta = Counter(aux).items()
+    print(respuesta)
+    respuesta = list(respuesta)
+    respuesta.sort(key=itemgetter(0))
+    return respuesta
 
 
 def pregunta_03():
@@ -57,7 +72,16 @@ def pregunta_03():
     ]
 
     """
-    return
+    resultado = {}
+    for fila in datos:
+        if resultado.get(fila[0]) == None:
+            resultado[fila[0]] = int(fila[1])
+        else:
+            resultado[fila[0]] += int(fila[1])
+
+    resultado = list(resultado.items())
+    resultado.sort(key=itemgetter(0))
+    return resultado
 
 
 def pregunta_04():
@@ -82,7 +106,17 @@ def pregunta_04():
     ]
 
     """
-    return
+    resultado = {}
+    for fila in datos:
+        mes = fila[2][5:7]
+        if resultado.get(mes) == None:
+            resultado[mes] = 1
+        else:
+            resultado[mes] += 1
+
+    resultado = list(resultado.items())
+    resultado.sort(key=itemgetter(0))
+    return resultado
 
 
 def pregunta_05():
@@ -100,7 +134,22 @@ def pregunta_05():
     ]
 
     """
-    return
+    letras = list(set([i[0] for i in datos]))
+    letras = sorted(letras)
+    listaAux = []
+
+    for _ in range(len(letras)):
+        listaAux.append([])
+
+    for fila in datos:
+        listaAux[ord(fila[0]) - ord('A')].append(int(fila[1]))
+
+    respuesta = []
+    for index, element in enumerate(listaAux):
+        tupla = (letras[index], max(element), min(element))
+        respuesta.append(tupla)
+
+    return respuesta
 
 
 def pregunta_06():
@@ -125,7 +174,23 @@ def pregunta_06():
     ]
 
     """
-    return
+    auxDiccionario = {}
+    for fila in datos:
+        aux = fila[4].split(',')
+        for i in aux:
+            clave = i[0:3]
+            valor = int(i[4:])
+            if auxDiccionario.get(clave) == None:
+                auxDiccionario[clave] = [valor]
+            else:
+                auxDiccionario[clave] += [valor]
+    
+    respuesta = []
+    for clave, valor in auxDiccionario.items():
+        respuesta.append((clave, min(valor), max(valor)))
+
+    respuesta.sort(key=itemgetter(0))
+    return respuesta
 
 
 def pregunta_07():
@@ -149,7 +214,17 @@ def pregunta_07():
     ]
 
     """
-    return
+    respuesta = {}
+    for fila in datos:
+        clave = int(fila[1])
+        if respuesta.get(clave) == None:
+            respuesta[clave] = [fila[0]]
+        else:
+            respuesta[clave] += [fila[0]]
+    
+    respuesta = list(respuesta.items())
+    respuesta.sort(key=itemgetter(0))
+    return respuesta
 
 
 def pregunta_08():
@@ -174,7 +249,20 @@ def pregunta_08():
     ]
 
     """
-    return
+    respuesta = {}
+    for fila in datos:
+        clave = int(fila[1])
+        if respuesta.get(clave) == None:
+            respuesta[clave] = [fila[0]]
+        else:
+            respuesta[clave] += [fila[0]]
+
+    for clave in respuesta.keys():
+        respuesta[clave] = sorted(list(set(respuesta[clave])))
+
+    respuesta = list(respuesta.items())
+    respuesta.sort(key=itemgetter(0))
+    return respuesta
 
 
 def pregunta_09():
@@ -197,7 +285,18 @@ def pregunta_09():
     }
 
     """
-    return
+    respuesta = {}
+    for fila in datos:
+        aux = fila[4].split(',')
+        for i in aux:
+            clave = i[0:3]
+            valor = int(i[4:])
+            if respuesta.get(clave) == None:
+                respuesta[clave] = 1
+            else:
+                respuesta[clave] += 1
+
+    return respuesta
 
 
 def pregunta_10():
@@ -218,7 +317,13 @@ def pregunta_10():
 
 
     """
-    return
+    respuesta = []
+    for fila in datos:
+        columna4 = fila[3].split(',')
+        columna5 = fila[4].split(',')
+        respuesta.append((fila[0], len(columna4), len(columna5)))
+
+    return respuesta
 
 
 def pregunta_11():
@@ -239,7 +344,15 @@ def pregunta_11():
 
 
     """
-    return
+    respuesta = {}
+    for fila in datos:
+        letrasColumna4 = fila[3].split(',')
+        for letra in letrasColumna4:
+            if respuesta.get(letra) == None:
+                respuesta[letra] = int(fila[1])
+            else:
+                respuesta[letra] += int(fila[1])
+    return respuesta
 
 
 def pregunta_12():
@@ -257,4 +370,15 @@ def pregunta_12():
     }
 
     """
-    return
+    respuesta = {}
+    for fila in datos:
+        columna5 = fila[4].split(',')
+        sumaValores = sum([int(i[4:]) for i in columna5])
+
+        clave = fila[0]
+        if respuesta.get(clave) == None:
+            respuesta[clave] = sumaValores
+        else:
+            respuesta[clave] += sumaValores
+
+    return respuesta
